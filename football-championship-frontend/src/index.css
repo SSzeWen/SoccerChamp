@@ -11,3 +11,87 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+html, body {
+  height: 100%;
+  padding: 0;
+}
+
+body {
+  background-image: url('./Background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-container, .rankings-page, .add-team-page, .add-match-page {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  margin: 20px;
+}
+
+.extended-container {
+  max-width: 800px;
+  width: 100%;
+  min-width: 600px;
+}
+
+.rankings-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 2.5rem;
+  color: #bb86fc;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #bb86fc;
+}
+
+.btn.btn-primary {
+  background-color: #bb86fc !important;
+  border-color: #bb86fc !important;
+  margin-bottom: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #3700b3 !important;
+  border-color: #3700b3 !important;
+}
+
+.form-control {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.form-control::placeholder {
+  color: #888;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: none;
+}
