@@ -110,6 +110,30 @@ const submitTeamsToBackend = (teams) => {
     }
   };
 
+  const clearAllTeams = () => {
+    fetch('http://localhost:8080/api/clearTeams', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response;
+      })
+      .then((data) => {
+        setSuccess('All teams successfully cleared!');
+        setError('');
+        onTeamsChange(data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setError('Failed to clear teams.');
+      });
+  };
+
   const handleSubmit = (isEdit) => {
     const lines = input.split('\n');
     const teams = [];
@@ -154,6 +178,10 @@ const submitTeamsToBackend = (teams) => {
               <div style={{ width: '15px' }}></div>
               <Button variant="primary" onClick={() => handleSubmit(true)}>
                 Edit
+              </Button>
+              <div style={{ width: '15px' }}></div>
+              <Button variant="primary" onClick={clearAllTeams}>
+                Clear Previous Teams
               </Button>
             </div>
           </Form>

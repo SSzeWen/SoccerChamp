@@ -59,4 +59,13 @@ public class TeamController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/api/clearTeams")
+    public ResponseEntity<Void> clearTeams() {
+        teamService.clearData();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }
