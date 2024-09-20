@@ -99,4 +99,11 @@ public class MatchController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/api/clearMatches")
+    public ResponseEntity<List<Match>> clearMatches() {
+        matchService.clearData();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

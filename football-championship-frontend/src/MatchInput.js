@@ -89,6 +89,7 @@ const submitEditedatchesToBackend = (matches) => {
     })
     .then((data) => {
       setSuccess('Matches successfully edited!');
+      setError('');
       onMatchesChange(data);
     })
     .catch((error) => {
@@ -97,6 +98,30 @@ const submitEditedatchesToBackend = (matches) => {
     });
 }
 
+const clearAllMatches = () => {
+  fetch('http://localhost:8080/api/clearMatches', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response;
+    })
+    .then((data) => {
+      console.log(data);
+      setSuccess('All matches successfully cleared!');
+      setError('');
+      onMatchesChange(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      setError('Failed to clear matches.');
+    });
+};
   
 
   const handleSubmit = (isEdit) => {
@@ -133,13 +158,15 @@ const submitEditedatchesToBackend = (matches) => {
         />
         </Form.Group>
         <div className="d-flex justify-content-center">
-          <Button variant="primary" onClick={() => handleSubmit(false)} className="mr-2">
+          <Button variant="primary" onClick={() => handleSubmit(false)}>
             Submit
           </Button>
           <div style={{ width: '15px' }}></div>
           <Button variant="primary" onClick={() => handleSubmit(true)}>
             Edit
           </Button>
+          <div style={{ width: '15px' }}></div>
+          <Button variant="primary" onClick={clearAllMatches}>Clear Previous Matches</Button>
         </div>
         </Form>
         </Container>
