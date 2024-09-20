@@ -85,7 +85,7 @@ const RankingsPage = () => {
     // Determine top 2 teams from each group
     Object.keys(groups).forEach(groupNumber => {
       const groupTeams = groups[groupNumber];
-      qualifyingTeams.push(...groupTeams.slice(0, 2));
+      qualifyingTeams.push(...groupTeams.slice(0, 4));
     });
 
     setQualifyingTeams(qualifyingTeams);
