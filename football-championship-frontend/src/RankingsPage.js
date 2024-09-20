@@ -25,11 +25,10 @@ const RankingsPage = () => {
         console.log(data);
         setRankings(data);
         determineQualifyingTeams(data);
-        setSuccess('Rankings successfully fetched!');
       })
       .catch((error) => {
         console.error('Error:', error);
-        setError('Failed to fetch rankings from the backend.');
+        setError('Failed to fetch rankings.');
       });
   };
 
@@ -61,11 +60,10 @@ const RankingsPage = () => {
   };
 
   return (
-    <Container className="extended-container">
+    <Container className="extended-container" style={{ color: 'white', paddingTop: '300px' }}>
       <h2>Rankings</h2>
       {error && <Alert variant="danger">{error}</Alert>}
-      {success && <Alert variant="success">{success}</Alert>}
-      <Table striped bordered hover>
+      <Table striped bordered hover variant="dark">
         <thead>
           <tr>
             <th>Team Name</th>
@@ -88,7 +86,7 @@ const RankingsPage = () => {
         </tbody>
       </Table>
       <h2>Qualifying Teams</h2>
-      <Table striped bordered hover>
+      <Table striped bordered hover variant="dark">
         <thead>
           <tr>
             <th>Team Name</th>
