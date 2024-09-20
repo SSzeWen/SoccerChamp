@@ -1,13 +1,13 @@
 import React from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import TeamInput from './TeamInput';
+import MatchInput from '../Components/MatchInput';
 
-function AddTeamPage({ onTeamsChange }) {
+function AddMatchPage({ onMatchesChange }) {
   return (
-    <Container className="add-team-page">
-      <h2>Add Team</h2>
-      <TeamInput onTeamsChange={onTeamsChange} />
+    <Container className="add-match-page">
+      <h2>Add Match</h2>
+      <MatchInput onMatchesChange={onMatchesChange} />
       <Link to="/main">
         <Button variant="primary">Back to Main</Button>
       </Link>
@@ -15,4 +15,4 @@ function AddTeamPage({ onTeamsChange }) {
   );
 }
 
-export default AddTeamPage;
+export default AddMatchPage;

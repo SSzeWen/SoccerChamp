@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
-import { auth } from './firebase';
+import { auth } from '../firebase';
 
 function TeamInput({ onTeamsChange }) {
   const [input, setInput] = useState('');

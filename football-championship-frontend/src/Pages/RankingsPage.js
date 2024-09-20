@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Alert, Table, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { auth } from './firebase';
+import { auth } from '../firebase';
 
 const RankingsPage = () => {
   const [rankings, setRankings] = useState([]);

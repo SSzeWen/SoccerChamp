@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
-import { auth } from './firebase';
+import { auth } from '../firebase';
 import { json } from 'react-router-dom';
 
 function MatchInput({ onMatchesChange }) {

@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-ro
 import { Button, Container } from 'react-bootstrap';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from './firebase';
-import LoginPage from './LoginPage';
-import SignupPage from './SignupPage';
-import RankingsPage from './RankingsPage';
-import AddTeamPage from './AddTeamPage';
-import AddMatchPage from './AddMatchPage';
-import RetrieveInfoPage from './RetrieveInfoPage';
+import LoginPage from './Pages/LoginPage';
+import SignupPage from './Pages/SignupPage';
+import RankingsPage from './Pages/RankingsPage';
+import AddTeamPage from './Pages/AddTeamPage';
+import AddMatchPage from './Pages/AddMatchPage';
+import RetrieveInfoPage from './Pages/RetrieveInfoPage';
 import './index.css';
 
 function App() {

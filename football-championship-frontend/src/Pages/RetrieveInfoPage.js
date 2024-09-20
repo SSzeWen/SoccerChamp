@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Alert, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { auth } from './firebase';
+import { auth } from '../firebase';
 
 const RetrieveInfoPage = () => {
   const [teamName, setTeamName] = useState('');
