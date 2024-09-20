@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
-import TeamDetails from './TeamDetails';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from './firebase';
+import LoginPage from './LoginPage';
+import SignupPage from './SignupPage';
 import RankingsPage from './RankingsPage';
 import AddTeamPage from './AddTeamPage';
 import AddMatchPage from './AddMatchPage';
@@ -12,6 +15,14 @@ function App() {
   const [teams, setTeams] = useState([]);
   const [matches, setMatches] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+    return unsubscribe;
+  }, []);
 
   const handleTeamsChange = (newTeams) => {
     setTeams(newTeams);
@@ -28,36 +39,57 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={
-          <Container className="main-container">
-            <h1>GovTech Football Championship</h1>
-            <Link to="/add-team">
-              <Button variant="primary">Add Team</Button>
-            </Link>
-            <Link to="/add-match">
-              <Button variant="primary">Add Match</Button>
-            </Link>
-            <Link to="/retrieve-info">
-              <Button variant="primary">Retrieve Info</Button>
-            </Link>
-            <Link to="/rankings">
-              <Button variant="primary">Rankings</Button>
-            </Link>
-            
-            {selectedTeam && <TeamDetails teamName={selectedTeam} teams={teams} matches={matches} />}
-          </Container>
+        <Route path="/" element={<Navigate to="/signup" />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/main" element={
+          user ? (
+            <Container className="main-container">
+              <h1>GovTech Football Championship</h1>
+              <Link to="/add-team">
+                <Button variant="primary">Add Team</Button>
+              </Link>
+              <Link to="/add-match">
+                <Button variant="primary">Add Match</Button>
+              </Link>
+              <Link to="/retrieve-info">
+                <Button variant="primary">Retrieve Info</Button>
+              </Link>
+              <Link to="/rankings">
+                <Button variant="primary">Rankings</Button>
+              </Link>
+            </Container>
+          ) : (
+            <Navigate to="/login" />
+          )
         } />
         <Route path="/rankings" element={
-          <RankingsPage teams={teams} matches={matches} onTeamSelect={handleTeamSelect} />
+          user ? (
+            <RankingsPage teams={teams} matches={matches} onTeamSelect={handleTeamSelect} />
+          ) : (
+            <Navigate to="/login" />
+          )
         } />
         <Route path="/add-team" element={
-          <AddTeamPage onTeamsChange={handleTeamsChange} />
+          user ? (
+            <AddTeamPage onTeamsChange={handleTeamsChange} />
+          ) : (
+            <Navigate to="/login" />
+          )
         } />
         <Route path="/add-match" element={
-          <AddMatchPage onMatchesChange={handleMatchesChange} />
+          user ? (
+            <AddMatchPage onMatchesChange={handleMatchesChange} />
+          ) : (
+            <Navigate to="/login" />
+          )
         } />
         <Route path="/retrieve-info" element={
-          <RetrieveInfoPage />
+          user ? (
+            <RetrieveInfoPage />
+          ) : (
+            <Navigate to="/login" />
+          )
         } />
       </Routes>
     </Router>

@@ -8,7 +8,7 @@ function AddMatchPage({ onMatchesChange }) {
     <Container className="add-match-page">
       <h2>Add Match</h2>
       <MatchInput onMatchesChange={onMatchesChange} />
-      <Link to="/">
+      <Link to="/main">
         <Button variant="primary">Back to Main</Button>
       </Link>
     </Container>

@@ -1,8 +1,5 @@
 package com.example.footballchampionship;
 
-import com.example.footballchampionship.Team;
-import com.example.footballchampionship.TeamService;
-import com.example.footballchampionship.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TeamController {
 
+    @Autowired
+    private MatchService matchService;
     private final TeamService teamService;
 
     @Autowired
@@ -25,10 +24,10 @@ public class TeamController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/api/teams")
+    @PostMapping("/api/teams/add")
     public ResponseEntity<List<Team>> addTeams(@RequestBody List<Team> teams) {
         for (Team inputTeam : teams) {
-            boolean teamExists = teamService.existsByName(inputTeam.getName());
+            boolean teamExists = teamService.existsById(inputTeam.getTeamId());
             if (teamExists) {
                 System.out.println("Failed to add teams");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -43,10 +42,10 @@ public class TeamController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/api/editTeams")
+    @PostMapping("/api/teams/edit")
     public ResponseEntity<List<Team>> editTeams(@RequestBody List<Team> teams) {
         for (Team inputTeam : teams) {
-            boolean teamExists = teamService.existsByName(inputTeam.getName());
+            boolean teamExists = teamService.existsById(inputTeam.getTeamId());
             if (!teamExists) {
                 System.out.println("Failed to add teams");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -62,8 +61,10 @@ public class TeamController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/api/clearTeams")
-    public ResponseEntity<Void> clearTeams() {
-        teamService.clearData();
+    public ResponseEntity<Void> clearTeams(@RequestBody Map<String, Object> payload) {
+        String email = (String) payload.get("email");
+        teamService.clearData(email);
+        matchService.clearData(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

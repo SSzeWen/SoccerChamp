@@ -1,20 +1,48 @@
 package com.example.footballchampionship;
 
-public class TeamScore extends Team {
+public class TeamScore {
 
     TeamScore(Team team) {
-        super.name = team.getName();
-        super.groupNumber = team.getGroupNumber();
-        super.registrationDate = team.getRegistrationDate();
+        teamName = team.getTeamId().getTeamName();
+        groupNumber = team.getGroupNumber();
+        registrationDate = team.getRegistrationDate();
         points = 0;
         goalsFor = 0;
         goalsAgainst = 0;
     }
+
+    private String teamName;
+    private int groupNumber;
+    private java.time.LocalDate registrationDate;
     private int points;
 
     private int altPoints;
     private int goalsFor;
     private int goalsAgainst;
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public int getGroupNumber() {
+        return groupNumber;
+    }
+
+    public void setGroupNumber(int groupNumber) {
+        this.groupNumber = groupNumber;
+    }
+
+    public java.time.LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(java.time.LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
 
     public int getAltPoints() {
         return altPoints;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Alert, Table } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { auth } from './firebase';
 
 const RetrieveInfoPage = () => {
   const [teamName, setTeamName] = useState('');
@@ -17,8 +18,18 @@ const RetrieveInfoPage = () => {
       setError('Please enter a team name.');
       return;
     }
-
-    fetch(`http://localhost:8080/api/teams/${encodeURIComponent(teamName)}`)
+    const teamId = {
+      email: auth.currentUser.uid, // Ensure you use email instead of uid
+      teamName: teamName
+    };
+    console.log(JSON.stringify(teamId));
+    fetch(`http://localhost:8080/api/retrieveInfo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(teamId),
+    })
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {
@@ -40,7 +51,7 @@ const RetrieveInfoPage = () => {
   };
 
   const handleReturn = () => {
-    navigate(-1); // Navigate back to the previous page
+    navigate('/main'); // Navigate back to the previous page
   };
 
   return (
@@ -65,7 +76,7 @@ const RetrieveInfoPage = () => {
       {info && (
         <div className="mt-3">
           <h3>Team Details:</h3>
-          <p><strong>Team Name:</strong> {info.team.name}</p>
+          <p><strong>Team Name:</strong> {info.team.teamId.teamName}</p>
           <p><strong>Registration Date:</strong> {info.team.registrationDate}</p>
           <p><strong>Group Number:</strong> {info.team.groupNumber}</p>
           <h3>Matches:</h3>
@@ -81,8 +92,8 @@ const RetrieveInfoPage = () => {
             <tbody>
               {info.matches.map((match, index) => (
                 <tr key={index}>
-                  <td>{match.id.teamHomeName}</td>
-                  <td>{match.id.teamAwayName}</td>
+                  <td>{match.matchId.teamHomeName}</td>
+                  <td>{match.matchId.teamAwayName}</td>
                   <td>{match.teamHomeGoals}</td>
                   <td>{match.teamAwayGoals}</td>
                 </tr>

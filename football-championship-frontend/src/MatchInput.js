@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { auth } from './firebase';
+import { json } from 'react-router-dom';
 
 function MatchInput({ onMatchesChange }) {
   const [input, setInput] = useState('');
@@ -31,7 +33,7 @@ function MatchInput({ onMatchesChange }) {
         setError('Invalid goals. Goals must be positive numbers.');
         return false;
       }
-      matches.push({ id:{teamHomeName: teamHomeName, teamAwayName: teamAwayName}, 
+      matches.push({ matchId:{email:auth.currentUser.uid, teamHomeName: teamHomeName, teamAwayName: teamAwayName}, 
         teamHomeGoals: parseInt(goalsHome), teamAwayGoals: parseInt(goalsAway) });
     }
     return true;
@@ -95,6 +97,7 @@ const submitEditedatchesToBackend = (matches) => {
     .catch((error) => {
       console.error('Error:', error);
       setError('Failed to edit matches.');
+      setSuccess('');
     });
 }
 
@@ -104,6 +107,7 @@ const clearAllMatches = () => {
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({email:auth.currentUser.uid}),
   })
     .then((response) => {
       if (!response.ok) {
@@ -120,6 +124,7 @@ const clearAllMatches = () => {
     .catch((error) => {
       console.error('Error:', error);
       setError('Failed to clear matches.');
+      setSuccess('');
     });
 };
   

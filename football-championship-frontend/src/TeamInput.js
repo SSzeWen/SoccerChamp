@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { auth } from './firebase';
 
 function TeamInput({ onTeamsChange }) {
   const [input, setInput] = useState('');
@@ -37,8 +38,7 @@ function TeamInput({ onTeamsChange }) {
       // Convert registrationDate to ISO format (YYYY-MM-DD) for LocalDate
       const [day, month] = registrationDate.split('/');
       const formattedDate = `2023-${month}-${day}`; // Assuming the year is 2023
-
-      teams.push({ name: teamName, registrationDate: formattedDate, groupNumber: groupNum});
+      teams.push({teamId:{email:auth.currentUser.uid, teamName:teamName}, registrationDate: formattedDate, groupNumber: groupNum});
     }
     return true
   }
@@ -50,7 +50,7 @@ const submitTeamsToBackend = (teams) => {
     console.log(JSON.stringify(teams));
     
     // Send the teams to the backend
-    fetch('http://localhost:8080/api/teams', {
+    fetch('http://localhost:8080/api/teams/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ const submitTeamsToBackend = (teams) => {
       console.log(JSON.stringify(teams));
       // setSuccess('Teams successfully added!');
       // Send the teams to the backend
-      fetch('http://localhost:8080/api/editTeams', {
+      fetch('http://localhost:8080/api/teams/edit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -111,11 +111,13 @@ const submitTeamsToBackend = (teams) => {
   };
 
   const clearAllTeams = () => {
+    console.log(auth.currentUser.uid)
     fetch('http://localhost:8080/api/clearTeams', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({email:auth.currentUser.uid}),
     })
       .then((response) => {
         if (!response.ok) {

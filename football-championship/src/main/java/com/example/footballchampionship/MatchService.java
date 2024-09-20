@@ -27,15 +27,15 @@ public class MatchService {
         return matchRepository.existsById(id);
     }
 
-    public List<Match> getAllMatches() {
-        return matchRepository.findAll();
+    public List<Match> getAllMatches(String email) {
+        return matchRepository.findByMatchId_Email(email);
     }
 
     public List<Match> updateMatch(List<Match> matches) {
         return matchRepository.saveAll(matches);
     }
 
-    public void clearData() {
-        matchRepository.deleteAll();
+    public void clearData(String email) {
+        matchRepository.deleteByMatchId_Email(email);
     }
 }

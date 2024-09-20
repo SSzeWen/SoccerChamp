@@ -1,6 +1,7 @@
 package com.example.footballchampionship;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,9 +13,8 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "teams")
 public class Team {
-    @Id
-    @Column(name = "name", nullable = false, unique = true)
-    protected String name;
+    @EmbeddedId
+    private TeamId teamId;
 
     @Column(name = "registration_date", nullable = false)
     protected LocalDate registrationDate;
@@ -22,12 +22,12 @@ public class Team {
     @Column(name = "group_number", nullable = false)
     protected int groupNumber;
 
-    public String getName() {
-        return name;
+    public TeamId getTeamId() {
+        return teamId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTeamId(TeamId teamId) {
+        this.teamId = teamId;
     }
 
     public LocalDate getRegistrationDate() {

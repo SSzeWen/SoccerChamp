@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Alert, Table, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { auth } from './firebase';
 
 const RankingsPage = () => {
   const [rankings, setRankings] = useState([]);
@@ -14,7 +15,13 @@ const RankingsPage = () => {
   }, []);
 
   const fetchRankingsFromBackend = () => {
-    fetch('http://localhost:8080/api/rankings')
+    fetch('http://localhost:8080/api/rankings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({email:auth.currentUser.uid}),
+    })
       .then((response) => {
         if (!response.ok) {
           console.log(response.status);
@@ -85,7 +92,7 @@ const RankingsPage = () => {
   };
 
   const handleReturnToMain = () => {
-    navigate('/');
+    navigate('/main');
   };
 
   return (
@@ -107,7 +114,7 @@ const RankingsPage = () => {
           {rankings.map((team, index) => (
             <tr key={index}>
               <td>{team.ranking}</td>
-              <td>{team.name}</td>
+              <td>{team.teamName}</td>
               <td>{team.groupNumber}</td>
               <td>{team.points}</td>
               <td>{team.goalsFor}</td>
@@ -129,7 +136,7 @@ const RankingsPage = () => {
           {qualifyingTeams.map((team, index) => (
             <tr key={index}>
               <td>{team.ranking}</td>
-              <td>{team.name}</td>
+              <td>{team.teamName}</td>
               <td>{team.groupNumber}</td>
             </tr>
           ))}

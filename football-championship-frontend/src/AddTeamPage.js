@@ -8,7 +8,7 @@ function AddTeamPage({ onTeamsChange }) {
     <Container className="add-team-page">
       <h2>Add Team</h2>
       <TeamInput onTeamsChange={onTeamsChange} />
-      <Link to="/">
+      <Link to="/main">
         <Button variant="primary">Back to Main</Button>
       </Link>
     </Container>

@@ -8,10 +8,10 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "matches",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"team_a_name", "team_b_name"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"email", "team_a_name", "team_b_name"}))
 public class Match {
     @EmbeddedId
-    private MatchId id;
+    private MatchId matchId;
 
     @Column(name = "team_home_goals", nullable = false)
     private int teamHomeGoals;
@@ -19,8 +19,12 @@ public class Match {
     @Column(name = "team_away_goals", nullable = false)
     private int teamAwayGoals;
 
-    public MatchId getId() {
-        return id;
+    public MatchId getMatchId() {
+        return matchId;
+    }
+
+    public void setMatchId(MatchId matchId) {
+        this.matchId = matchId;
     }
     public int getTeamHomeGoals() {
         return teamHomeGoals;

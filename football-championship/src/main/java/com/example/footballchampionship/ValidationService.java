@@ -10,25 +10,41 @@ import java.util.Map;
 public class ValidationService {
 
     public void validateMatches(List<Team> teams, List<Match> matches, List<Match> currentMatches) {
-        List<String> teamNames = new ArrayList<>();
-        List<String> matchNames = new ArrayList<>();
+        List<TeamId> teamIds = new ArrayList<>();
+        List<TeamId> matchTeamIds = new ArrayList<>();
         for (Team team : teams) {
-            teamNames.add(team.getName());
+            teamIds.add(team.getTeamId());
         }
 
         for (Match match : matches) {
-            if (!teamNames.contains(match.getId().getTeamHomeName()) || !teamNames.contains(match.getId().getTeamAwayName())) {
-                throw new IllegalArgumentException("Invalid team name in match: " + match.getId().getTeamHomeName() + " vs "
-                        + match.getId().getTeamAwayName());
+            TeamId homeTeamId = new TeamId(match.getMatchId().getEmail(), match.getMatchId().getTeamHomeName());
+            TeamId awayTeamId = new TeamId(match.getMatchId().getEmail(), match.getMatchId().getTeamAwayName());
+            boolean homeTeamExists = false;
+            boolean awayTeamExists = false;
+            for (TeamId teamId : teamIds) {
+                if (teamId.equals(homeTeamId)) {
+                    homeTeamExists = true;
+                    break;
+                }
+            }
+            for (TeamId teamId : teamIds) {
+                if (teamId.equals(awayTeamId)) {
+                    awayTeamExists = true;
+                    break;
+                }
+            }
+
+            if (!homeTeamExists || !awayTeamExists) {
+                throw new IllegalArgumentException("Invalid team name in match: " + match.getMatchId().getTeamHomeName()
+                        + " vs " + match.getMatchId().getTeamAwayName());
             }
         }
 
         for (Match match : matches) {
             for (Match currentMatch : currentMatches) {
-                if (match.getId().getTeamHomeName().equals(currentMatch.getId().getTeamHomeName()) &&
-                        match.getId().getTeamAwayName().equals(currentMatch.getId().getTeamAwayName())) {
-                    throw new IllegalArgumentException("Duplicate match in current matches: " + match.getId().getTeamHomeName() + " vs "
-                            + match.getId().getTeamAwayName());
+                if (match.getMatchId().equals(currentMatch.getMatchId())) {
+                    throw new IllegalArgumentException("Duplicate match in current matches: "
+                            + match.getMatchId().getTeamHomeName() + " vs " + match.getMatchId().getTeamAwayName());
                 }
             }
         }
@@ -38,12 +54,12 @@ public class ValidationService {
         Map<String, TeamScore> teamStats = new HashMap<>();
 
         for (Team team : teams) {
-            teamStats.put(team.getName(), new TeamScore(team));
+            teamStats.put(team.getTeamId().getTeamName(), new TeamScore(team));
         }
 
         for (Match match : matches) {
-            String teamAName = match.getId().getTeamHomeName();
-            String teamBName = match.getId().getTeamAwayName();
+            String teamAName = match.getMatchId().getTeamHomeName();
+            String teamBName = match.getMatchId().getTeamAwayName();
             int teamAGoals = match.getTeamHomeGoals();
             int teamBGoals = match.getTeamAwayGoals();
 
