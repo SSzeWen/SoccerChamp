@@ -21,8 +21,12 @@ const RetrieveInfoPage = () => {
     fetch(`http://localhost:8080/api/teams/${encodeURIComponent(teamName)}`)
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('No Info on team. Please add the team.');
+          }
           throw new Error('Network response was not ok');
         }
+        
         return response.json();
       })
       .then((data) => {
@@ -31,7 +35,7 @@ const RetrieveInfoPage = () => {
       })
       .catch((error) => {
         console.error('Error:', error);
-        setError('Failed to retrieve information.');
+        setError(error.message);
       });
   };
 
@@ -55,7 +59,7 @@ const RetrieveInfoPage = () => {
       <div className="d-flex justify-content-center">
       <Button variant="primary" onClick={handleRetrieveInfo}>Retrieve Info</Button>
       <div style={{ width: '15px' }}></div>
-      <Button variant="primary" onClick={handleReturn} className="ml-2">Return</Button>
+      <Button variant="primary" onClick={handleReturn} className="ml-2">Back to Main</Button>
       </div>
       {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
       {info && (

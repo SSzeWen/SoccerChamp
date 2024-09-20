@@ -17,19 +17,48 @@ const RankingsPage = () => {
     fetch('http://localhost:8080/api/rankings')
       .then((response) => {
         if (!response.ok) {
+          console.log(response.status);
           throw new Error('Network response was not ok');
+        }
+        if (response.status === 204) {
+          throw new Error('No Rankings available. Please add teams and matches.');
         }
         return response.json();
       })
       .then((data) => {
         console.log(data);
-        setRankings(data);
-        determineQualifyingTeams(data);
+        const rankedData = addRankingToData(data);
+        setRankings(rankedData);
+        determineQualifyingTeams(rankedData);
       })
       .catch((error) => {
         console.error('Error:', error);
-        setError('Failed to fetch rankings.');
+        setError(error.message);
       });
+  };
+
+  const addRankingToData = (data) => {
+    const groups = {};
+
+    // Group teams by their group number
+    data.forEach(team => {
+      const groupNumber = team.groupNumber;
+      if (!groups[groupNumber]) {
+        groups[groupNumber] = [];
+      }
+      groups[groupNumber].push(team);
+    });
+
+    // Sort each group by points and assign ranking
+    Object.keys(groups).forEach(groupNumber => {
+      groups[groupNumber].sort((a, b) => b.points - a.points);
+      groups[groupNumber].forEach((team, index) => {
+        team.ranking = index + 1;
+      });
+    });
+
+    // Flatten the grouped data back into a single array
+    return Object.values(groups).flat();
   };
 
   const determineQualifyingTeams = (rankings) => {
@@ -66,6 +95,7 @@ const RankingsPage = () => {
       <Table striped bordered hover variant="dark">
         <thead>
           <tr>
+            <th>Rank</th>
             <th>Team Name</th>
             <th>Group Number</th>
             <th>Points</th>
@@ -76,6 +106,7 @@ const RankingsPage = () => {
         <tbody>
           {rankings.map((team, index) => (
             <tr key={index}>
+              <td>{team.ranking}</td>
               <td>{team.name}</td>
               <td>{team.groupNumber}</td>
               <td>{team.points}</td>
@@ -89,6 +120,7 @@ const RankingsPage = () => {
       <Table striped bordered hover variant="dark">
         <thead>
           <tr>
+            <th>Rank</th>
             <th>Team Name</th>
             <th>Group Number</th>
           </tr>
@@ -96,13 +128,14 @@ const RankingsPage = () => {
         <tbody>
           {qualifyingTeams.map((team, index) => (
             <tr key={index}>
+              <td>{team.ranking}</td>
               <td>{team.name}</td>
               <td>{team.groupNumber}</td>
             </tr>
           ))}
         </tbody>
       </Table>
-      <Button variant="primary" onClick={handleReturnToMain}>Return to Main</Button>
+      <Button variant="primary" onClick={handleReturnToMain}>Back to Main</Button>
     </Container>
   );
 };
