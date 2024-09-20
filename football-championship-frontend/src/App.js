@@ -5,6 +5,7 @@ import TeamDetails from './TeamDetails';
 import RankingsPage from './RankingsPage';
 import AddTeamPage from './AddTeamPage';
 import AddMatchPage from './AddMatchPage';
+import RetrieveInfoPage from './RetrieveInfoPage';
 import './index.css';
 
 function App() {
@@ -36,9 +37,13 @@ function App() {
             <Link to="/add-match">
               <Button variant="primary">Add Match</Button>
             </Link>
+            <Link to="/retrieve-info">
+              <Button variant="primary">Retrieve Info</Button>
+            </Link>
             <Link to="/rankings">
               <Button variant="primary">Rankings</Button>
             </Link>
+            
             {selectedTeam && <TeamDetails teamName={selectedTeam} teams={teams} matches={matches} />}
           </Container>
         } />
@@ -50,6 +55,9 @@ function App() {
         } />
         <Route path="/add-match" element={
           <AddMatchPage onMatchesChange={handleMatchesChange} />
+        } />
+        <Route path="/retrieve-info" element={
+          <RetrieveInfoPage />
         } />
       </Routes>
     </Router>

@@ -38,7 +38,7 @@ function TeamInput({ onTeamsChange }) {
       const [day, month] = registrationDate.split('/');
       const formattedDate = `2023-${month}-${day}`; // Assuming the year is 2023
 
-      teams.push({ name: teamName, registrationDate: formattedDate, groupNumber: groupNum });
+      teams.push({ name: teamName, registrationDate: formattedDate, groupNumber: groupNum});
     }
     return true
   }
@@ -48,7 +48,7 @@ function TeamInput({ onTeamsChange }) {
 const submitTeamsToBackend = (teams) => {
   if (teams.length > 0) {
     console.log(JSON.stringify(teams));
-    setSuccess('Teams successfully added!');
+    
     // Send the teams to the backend
     fetch('http://localhost:8080/api/teams', {
       method: 'POST',
@@ -65,6 +65,7 @@ const submitTeamsToBackend = (teams) => {
       })
       .then((data) => {
         console.log('Success:', data);
+        setSuccess('Teams successfully added!');
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -76,7 +77,40 @@ const submitTeamsToBackend = (teams) => {
   }
 };
 
-  const handleSubmit = () => {
+  // Function to submit teams to the backend
+  const submitEditedTeamsToBackend = (teams) => {
+    if (teams.length > 0) {
+      console.log(JSON.stringify(teams));
+      // setSuccess('Teams successfully added!');
+      // Send the teams to the backend
+      fetch('http://localhost:8080/api/editTeams', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(teams),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log('Success:', data);
+          setSuccess('Teams successfully added!');
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          setError('Team does not exist!');
+          setSuccess(''); // Clear success message on error
+        });
+    } else {
+      setSuccess(''); // Clear success message if no teams were added
+    }
+  };
+
+  const handleSubmit = (isEdit) => {
     const lines = input.split('\n');
     const teams = [];
     const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])$/; // Regex for DD/MM format
@@ -86,8 +120,11 @@ const submitTeamsToBackend = (teams) => {
     if (!isValidInput) {
       return;
     }
-    submitTeamsToBackend(teams);
-
+    if (!isEdit) {
+      submitTeamsToBackend(teams);
+    } else {
+      submitEditedTeamsToBackend(teams)
+    }
     setError('');
     onTeamsChange(teams);
     setInput(''); // Clear input field only upon successful input format
@@ -110,9 +147,15 @@ const submitTeamsToBackend = (teams) => {
                 placeholder="<Team Name> <Registration Date in DD/MM> <Group Number>"
               />
             </Form.Group>
-            <Button variant="primary" onClick={handleSubmit}>
-              Submit
-            </Button>
+            <div className="d-flex justify-content-center">
+              <Button variant="primary" onClick={() => handleSubmit(false)}>
+                Submit
+              </Button>
+              <div style={{ width: '15px' }}></div>
+              <Button variant="primary" onClick={() => handleSubmit(true)}>
+                Edit
+              </Button>
+            </div>
           </Form>
         </Col>
       </Row>
