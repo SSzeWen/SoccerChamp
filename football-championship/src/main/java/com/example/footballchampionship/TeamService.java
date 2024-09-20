@@ -17,17 +17,19 @@ public class TeamService {
     }
 
     public Team getTeam(String name) throws ResourceNotFoundException {
-        return teamRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Team not found"));
+        return teamRepository.findById(name).orElseThrow(() -> new ResourceNotFoundException("Team not found"));
     }
 
-    public void updateTeam(Team team) throws ResourceNotFoundException {
-        Team existingTeam = teamRepository.findByName(team.getName()).orElseThrow(
-                () -> new ResourceNotFoundException("Team not found")
-        );
-        existingTeam.setName(team.getName());
-        existingTeam.setRegistrationDate(team.getRegistrationDate());
-        existingTeam.setGroupNumber(team.getGroupNumber());
-        teamRepository.save(existingTeam);
+    public List<Team> getAllTeams() {
+        return teamRepository.findAll();
+    }
+
+    public List<Team> updateTeams(List<Team> teams) {
+        return teamRepository.saveAll(teams);
+    }
+
+    boolean existsByName(String name) {
+        return teamRepository.existsById(name);
     }
 
     public void clearData() {

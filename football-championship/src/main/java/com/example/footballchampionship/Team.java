@@ -12,28 +12,15 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "teams")
 public class Team {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    protected String name;
 
     @Column(name = "registration_date", nullable = false)
-    private LocalDate registrationDate;
+    protected LocalDate registrationDate;
 
     @Column(name = "group_number", nullable = false)
-    private int groupNumber;
-
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    protected int groupNumber;
 
     public String getName() {
         return name;
