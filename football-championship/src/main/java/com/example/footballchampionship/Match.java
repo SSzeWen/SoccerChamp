@@ -1,70 +1,40 @@
 package com.example.footballchampionship;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "matches")
+@Table(name = "matches",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"team_a_name", "team_b_name"}))
 public class Match {
+    @EmbeddedId
+    private MatchId id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "team_home_goals", nullable = false)
+    private int teamHomeGoals;
 
-    @Column(name = "team_a_id", nullable = false)
-    private Long teamAId;
+    @Column(name = "team_away_goals", nullable = false)
+    private int teamAwayGoals;
 
-    @Column(name = "team_b_id", nullable = false)
-    private Long teamBId;
-
-    @Column(name = "team_a_goals", nullable = false)
-    private int teamAGoals;
-
-    @Column(name = "team_b_goals", nullable = false)
-    private int teamBGoals;
-
-    // Getters and setters
-    public Long getId() {
+    public MatchId getId() {
         return id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    public int getTeamHomeGoals() {
+        return teamHomeGoals;
     }
 
-    public Long getTeamAId() {
-        return teamAId;
+    public void setTeamHomeGoals(int teamHomeGoals) {
+        this.teamHomeGoals = teamHomeGoals;
     }
 
-    public void setTeamAId(Long teamAId) {
-        this.teamAId = teamAId;
+    public int getTeamAwayGoals() {
+        return teamAwayGoals;
     }
 
-    public Long getTeamBId() {
-        return teamBId;
-    }
-
-    public void setTeamBId(Long teamBId) {
-        this.teamBId = teamBId;
-    }
-
-    public int getTeamAGoals() {
-        return teamAGoals;
-    }
-
-    public void setTeamAGoals(int teamAGoals) {
-        this.teamAGoals = teamAGoals;
-    }
-
-    public int getTeamBGoals() {
-        return teamBGoals;
-    }
-
-    public void setTeamBGoals(int teamBGoals) {
-        this.teamBGoals = teamBGoals;
+    public void setTeamAwayGoals(int teamAwayGoals) {
+        this.teamAwayGoals = teamAwayGoals;
     }
 }

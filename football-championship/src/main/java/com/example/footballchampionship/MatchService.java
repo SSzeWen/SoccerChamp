@@ -19,10 +19,22 @@ public class MatchService {
         return matchRepository.saveAll(matches);
     }
 
-    public Match getMatch(Long id) throws ResourceNotFoundException {
+    public Match getMatch(MatchId id) throws ResourceNotFoundException {
         return matchRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Match not found"));
     }
-    
+
+    public boolean existsById(MatchId id) {
+        return matchRepository.existsById(id);
+    }
+
+    public List<Match> getAllMatches() {
+        return matchRepository.findAll();
+    }
+
+    public List<Match> updateMatch(List<Match> matches) {
+        return matchRepository.saveAll(matches);
+    }
+
     public void clearData() {
         matchRepository.deleteAll();
     }
