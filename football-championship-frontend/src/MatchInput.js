@@ -13,11 +13,20 @@ function MatchInput({ onMatchesChange }) {
   const validateInput = (lines, matches) => {
     for (let line of lines) {
       const [teamHomeName, teamAwayName, goalsHome, goalsAway] = line.split(' ');
+
+      // Must be String names
       if (!teamHomeName || typeof teamHomeName !== 'string' || !teamAwayName || typeof teamAwayName !== 'string') {
         setError('Invalid team names. Team names must be non-empty strings.');
         return false;
       }
+
+      // Cannot fight itself
+      if (teamHomeName == teamAwayName) {
+        setError('Same team cannot play against itself.');
+        return false;
+      }
       
+      // Cannot have negative goals or non-numeric goals
       if (!goalsHome || isNaN(goalsHome) || goalsHome < 0 || !goalsAway || isNaN(goalsAway) || goalsAway < 0) {
         setError('Invalid goals. Goals must be positive numbers.');
         return false;
