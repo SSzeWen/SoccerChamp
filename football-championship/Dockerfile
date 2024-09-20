@@ -6,7 +6,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the executable JAR file from the host machine to the container
-COPY target/football-championship.jar app.jar
+COPY target/football-championship-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose the port that the application will run on
 EXPOSE 8080
